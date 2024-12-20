@@ -6,6 +6,7 @@ import { signOut } from 'firebase/auth'
 import { auth } from '../../../lib/firebase'
 import { useAuth } from '@/app/hooks/useAuth'
 import { useUserGroups } from '@/app/hooks/useUserGroups'
+import { GroupCard } from '@/app/components/GroupCard'
 
 const Dashboard = () => {
   const router = useRouter()
@@ -15,9 +16,6 @@ const Dashboard = () => {
     loading: groupLoading,
     error,
   } = useUserGroups(user?.uid || null)
-
-  console.log('user', user)
-  console.log('groups', groups)
 
   const handleSignOut = async () => {
     if (!window.confirm('Are you sure you want to sign out?')) return
@@ -39,11 +37,21 @@ const Dashboard = () => {
   if (error) return <p>{error}</p>
 
   return (
-    <div className='w-full flex items-center justify-between pt-4'>
-      <h1 className='text-3xl font-semibold'>Dashboard</h1>
-      <button className='rounded py-2 px-4 bg-red-300' onClick={handleSignOut}>
-        Sign out
-      </button>
+    <div className='w-full flex-col'>
+      <div className='w-full flex items-center justify-between pt-4'>
+        <h1 className='text-3xl font-semibold'>Dashboard</h1>
+        <button
+          className='rounded py-2 px-4 bg-red-300'
+          onClick={handleSignOut}
+        >
+          Sign out
+        </button>
+      </div>
+      <div className='mt-10'>
+        {groups.map((group, index) => (
+          <GroupCard key={index} {...group} />
+        ))}
+      </div>
     </div>
   )
 }

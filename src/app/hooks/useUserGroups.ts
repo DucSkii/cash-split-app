@@ -5,6 +5,7 @@ import { db } from '@/lib/firebase'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 
 interface PaymentGroup {
+  id: string
   admins: string[]
   created_at: Date
   description?: string
@@ -38,6 +39,7 @@ export const useUserGroups = (userID: string | null) => {
         // We get all the docs
 
         const fetchedGroups: PaymentGroup[] = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
           ...doc.data(),
         })) as PaymentGroup[]
         // Map through the docs which creates a new array of doc.data(), this will be an array of objects of type PaymentGroup
